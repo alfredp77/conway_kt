@@ -10,13 +10,21 @@ class MenuAction(private val userInputOutput: UserInputOutput, private val input
         val initial = inputProcessor.initialize(gameParameters)
         userInputOutput.displayLine(initial.prompt)
 
-        val input = userInputOutput.readLine()
-        if (input == Commands.EXIT.value) {
-            return gameParameters
-        }
+        do {
+            val input = userInputOutput.readLine()
+            if (input == Commands.EXIT.value) {
+                return gameParameters
+            }
 
-        val processedInput = inputProcessor.process(input)
-        return processedInput.gameParameters
+            val processedInput = inputProcessor.process(input)
+            if (processedInput.isValid && !processedInput.shouldContinue) {
+                return processedInput.gameParameters
+            } else {
+                userInputOutput.displayLine(processedInput.prompt)
+            }
+        } while (processedInput.shouldContinue)
+
+        return gameParameters
     }
 
 }

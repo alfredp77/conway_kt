@@ -27,7 +27,10 @@ class MenuActionTest {
     @Test
     fun `should first display prompt from initialize result of input processor on execute`() {
         val gameParameters = GameParameters()
-        whenever(inputProcessor.initialize(gameParameters)).thenReturn(ProcessedInput("testPrompt", gameParameters))
+        whenever(inputProcessor.initialize(gameParameters)).thenReturn(ProcessedInput(
+            "testPrompt",
+            gameParameters
+        ))
         val menuAction = MenuAction(userInputOutput, inputProcessor)
 
         menuAction.execute(gameParameters)
@@ -59,5 +62,20 @@ class MenuActionTest {
         val result = menuAction.execute(gameParameters)
 
         assertEquals(processedGameParameters, result)
+    }
+
+    @Test
+    fun `should ask for input again when it is invalid`() {
+        val gameParameters = GameParameters()
+        whenever(userInputOutput.readLine()).thenReturn("testInput", Commands.EXIT.value)
+        val processedGameParameters = GameParameters(1)
+        whenever(inputProcessor.process("testInput"))
+            .thenReturn(ProcessedInput.invalid("wrong", processedGameParameters))
+
+        val menuAction = MenuAction(userInputOutput, inputProcessor)
+
+        val result = menuAction.execute(gameParameters)
+
+        assertEquals(gameParameters, result)
     }
 }
