@@ -1,5 +1,3 @@
 package com.conway.game
 
-class GameParameters {
-
-}
+class GameParameters(public val generations: Int = 0)
