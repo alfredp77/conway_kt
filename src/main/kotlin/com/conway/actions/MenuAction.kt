@@ -7,6 +7,10 @@ import com.conway.tools.InvalidInputMessage
 import com.conway.tools.UserInputOutput
 
 class MenuAction(private val userInputOutput: UserInputOutput, private val inputProcessor: InputProcessor) {
+    val description = inputProcessor.description
+    val id = inputProcessor.id
+
+    //val id get()
     fun execute(gameParameters: GameParameters): GameParameters {
         var current = inputProcessor.initialize(gameParameters)
         while (current.shouldContinue) {

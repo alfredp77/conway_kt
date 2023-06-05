@@ -26,6 +26,19 @@ class MenuActionTest {
 
 
     @Test
+    fun `should use id and description from inputProcessor`() {
+        inputProcessor.stub {
+            on { id } doReturn "testId"
+            on { description } doReturn "testDescription"
+        }
+
+        val menuAction = MenuAction(userInputOutput, inputProcessor)
+
+        assertEquals("testId", menuAction.id)
+        assertEquals("testDescription", menuAction.description)
+    }
+
+    @Test
     fun `should first display prompt from initialize result of input processor on execute`() {
         val gameParameters = GameParameters()
         whenever(inputProcessor.initialize(gameParameters)).thenReturn(ProcessedInput.validAndContinue(
