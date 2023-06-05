@@ -4,6 +4,7 @@ import com.conway.game.GameParameters
 import com.conway.inputProcessors.InputProcessor
 import com.conway.inputProcessors.ProcessedInput
 import com.conway.tools.Commands
+import com.conway.tools.InvalidInputMessage
 import com.conway.tools.UserInputOutput
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -35,7 +36,7 @@ class MenuActionTest {
 
         menuAction.execute(gameParameters)
 
-        verify(userInputOutput).displayLine("testPrompt")
+        verify(userInputOutput).displayLine(MenuAction.getPrompt("testPrompt"))
     }
 
     @Test
@@ -77,6 +78,7 @@ class MenuActionTest {
         val result = menuAction.execute(gameParameters)
 
         assertEquals(processedGameParameters, result)
+        verify(userInputOutput, times(1)).displayLine(InvalidInputMessage)
     }
 
     @Test
@@ -95,5 +97,35 @@ class MenuActionTest {
         val result = menuAction.execute(gameParameters)
 
         assertEquals(exitGameParameters, result)
+    }
+
+    @Test
+    fun `should display last prompt on exit if any`() {
+        val gameParameters = GameParameters()
+        whenever(userInputOutput.readLine()).thenReturn("testInput1")
+        val processedGameParameters = GameParameters(1)
+        whenever(inputProcessor.process("testInput1", gameParameters))
+            .thenReturn(ProcessedInput.validAndExit("xyz", processedGameParameters))
+
+        val menuAction = MenuAction(userInputOutput, inputProcessor)
+
+        menuAction.execute(gameParameters)
+
+        verify(userInputOutput).displayLine(MenuAction.getExitPrompt("xyz"))
+    }
+
+    @Test
+    fun `should not display anything on exit when there's no exit prompt`() {
+        val gameParameters = GameParameters()
+        whenever(userInputOutput.readLine()).thenReturn("testInput1")
+        val processedGameParameters = GameParameters(1)
+        whenever(inputProcessor.process("testInput1", gameParameters))
+            .thenReturn(ProcessedInput.validAndExit("", processedGameParameters))
+
+        val menuAction = MenuAction(userInputOutput, inputProcessor)
+
+        menuAction.execute(gameParameters)
+
+        verify(userInputOutput, never()).displayLine(MenuAction.getExitPrompt(""))
     }
 }
