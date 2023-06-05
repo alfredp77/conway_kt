@@ -7,24 +7,22 @@ import com.conway.tools.UserInputOutput
 
 class MenuAction(private val userInputOutput: UserInputOutput, private val inputProcessor: InputProcessor) {
     fun execute(gameParameters: GameParameters): GameParameters {
-        val initial = inputProcessor.initialize(gameParameters)
-        userInputOutput.displayLine(initial.prompt)
+        var current = inputProcessor.initialize(gameParameters)
+        userInputOutput.displayLine(current.prompt)
 
-        do {
+        while (current.shouldContinue) {
             val input = userInputOutput.readLine()
             if (input == Commands.EXIT.value) {
-                return gameParameters
+                break;
             }
 
-            val processedInput = inputProcessor.process(input)
-            if (processedInput.isValid && !processedInput.shouldContinue) {
-                return processedInput.gameParameters
-            } else {
-                userInputOutput.displayLine(processedInput.prompt)
+            current = inputProcessor.process(input, current.gameParameters)
+            if (!current.isValid) {
+                userInputOutput.displayLine(current.prompt)
             }
-        } while (processedInput.shouldContinue)
+        }
 
-        return gameParameters
+        return current.gameParameters
     }
 
 }

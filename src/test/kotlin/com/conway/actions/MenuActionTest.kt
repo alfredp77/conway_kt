@@ -19,7 +19,7 @@ class MenuActionTest {
     @BeforeEach
     fun setUp() {
         whenever(inputProcessor.initialize(any())).thenCallRealMethod()
-        whenever(inputProcessor.process(any())).thenCallRealMethod()
+        whenever(inputProcessor.process(any(), any())).thenCallRealMethod()
         whenever(userInputOutput.readLine()).thenReturn("")
     }
 
@@ -27,7 +27,7 @@ class MenuActionTest {
     @Test
     fun `should first display prompt from initialize result of input processor on execute`() {
         val gameParameters = GameParameters()
-        whenever(inputProcessor.initialize(gameParameters)).thenReturn(ProcessedInput(
+        whenever(inputProcessor.initialize(gameParameters)).thenReturn(ProcessedInput.validAndContinue(
             "testPrompt",
             gameParameters
         ))
@@ -46,7 +46,7 @@ class MenuActionTest {
 
         menuAction.execute(gameParameters)
 
-        verify(inputProcessor, never()).process(any())
+        verify(inputProcessor, never()).process(any(), any())
     }
 
     @Test
@@ -54,8 +54,8 @@ class MenuActionTest {
         val gameParameters = GameParameters()
         whenever(userInputOutput.readLine()).thenReturn("testInput")
         val processedGameParameters = GameParameters(1)
-        whenever(inputProcessor.process("testInput"))
-            .thenReturn(ProcessedInput("", processedGameParameters))
+        whenever(inputProcessor.process("testInput", gameParameters))
+            .thenReturn(ProcessedInput.validAndExit("", processedGameParameters))
 
         val menuAction = MenuAction(userInputOutput, inputProcessor)
 
@@ -69,13 +69,31 @@ class MenuActionTest {
         val gameParameters = GameParameters()
         whenever(userInputOutput.readLine()).thenReturn("testInput", Commands.EXIT.value)
         val processedGameParameters = GameParameters(1)
-        whenever(inputProcessor.process("testInput"))
+        whenever(inputProcessor.process("testInput", gameParameters))
             .thenReturn(ProcessedInput.invalid("wrong", processedGameParameters))
 
         val menuAction = MenuAction(userInputOutput, inputProcessor)
 
         val result = menuAction.execute(gameParameters)
 
-        assertEquals(gameParameters, result)
+        assertEquals(processedGameParameters, result)
+    }
+
+    @Test
+    fun `should ask for input again when it is valid and needs more input`() {
+        val gameParameters = GameParameters()
+        whenever(userInputOutput.readLine()).thenReturn("testInput1", "testInput2")
+        val processedGameParameters = GameParameters(1)
+        val exitGameParameters = GameParameters(2)
+        whenever(inputProcessor.process("testInput1", gameParameters))
+            .thenReturn(ProcessedInput.validAndContinue("", processedGameParameters))
+        whenever(inputProcessor.process("testInput2", processedGameParameters))
+            .thenReturn(ProcessedInput.validAndExit("", exitGameParameters))
+
+        val menuAction = MenuAction(userInputOutput, inputProcessor)
+
+        val result = menuAction.execute(gameParameters)
+
+        assertEquals(exitGameParameters, result)
     }
 }

@@ -6,7 +6,7 @@ interface InputProcessor {
     fun initialize(gameParameters: GameParameters): ProcessedInput {
         return ProcessedInput.validAndContinue("", gameParameters)
     }
-    fun process(input: String): ProcessedInput {
-        return ProcessedInput.validAndContinue("", GameParameters())
+    fun process(input: String, gameParameters: GameParameters): ProcessedInput {
+        return ProcessedInput.validAndExit("", gameParameters)
     }
 }
