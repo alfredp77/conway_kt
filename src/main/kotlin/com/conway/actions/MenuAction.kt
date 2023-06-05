@@ -6,12 +6,11 @@ import com.conway.tools.Commands
 import com.conway.tools.InvalidInputMessage
 import com.conway.tools.UserInputOutput
 
-class MenuAction(private val userInputOutput: UserInputOutput, private val inputProcessor: InputProcessor) {
-    val description = inputProcessor.description
-    val id = inputProcessor.id
+class MenuAction(private val userInputOutput: UserInputOutput, private val inputProcessor: InputProcessor) : Action {
+    override val description = inputProcessor.description
+    override val id = inputProcessor.id
 
-    //val id get()
-    fun execute(gameParameters: GameParameters): GameParameters {
+    override fun execute(gameParameters: GameParameters): GameParameters {
         var current = inputProcessor.initialize(gameParameters)
         while (current.shouldContinue) {
             userInputOutput.displayLine(getPrompt(current.prompt))
