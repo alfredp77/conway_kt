@@ -17,7 +17,7 @@ class MenuAction(private val userInputOutput: UserInputOutput, private val input
             userInputOutput.displayLine(getPrompt(current.prompt))
             val input = userInputOutput.readLine()
             if (input == Commands.EXIT.value) {
-                break;
+                break
             }
 
             current = inputProcessor.process(input, current.gameParameters)
