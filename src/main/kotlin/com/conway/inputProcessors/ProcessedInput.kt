@@ -8,7 +8,7 @@ data class ProcessedInput(val prompt: String,
         val shouldContinue: Boolean = false) {
     companion object {
         fun invalid(prompt: String, gameParameters: GameParameters): ProcessedInput {
-            return ProcessedInput(prompt, gameParameters, false)
+            return ProcessedInput(prompt, gameParameters, false, true)
         }
 
         fun validAndContinue(prompt: String, gameParameters: GameParameters): ProcessedInput {
