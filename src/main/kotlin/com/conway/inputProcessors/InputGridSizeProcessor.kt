@@ -4,10 +4,8 @@ import com.conway.game.GameParameters
 import com.conway.tools.InvalidInputMessage
 
 class InputGridSizeProcessor : InputProcessor {
-    override val id: String
-        get() = TODO("Not yet implemented")
-    override val description: String
-        get() = TODO("Not yet implemented")
+    override val id = "1"
+    override val description = "Specify grid size"
 
     override fun process(input: String, gameParameters: GameParameters): ProcessedInput {
         input.split(" ").let {
