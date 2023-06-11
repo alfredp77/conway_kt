@@ -23,7 +23,7 @@ class InputGridSizeProcessorTest {
 
     @Test
     fun `should parse input to grid size` () {
-        val gameParameters = GameParameters(maxWidth = 10, maxHeight = 15)
+        val gameParameters = GameParameters(maxWidth = 10, maxHeight = 15,)
 
         val processedInput = inputGridSizeProcessor.process("5 7", gameParameters)
 
@@ -48,7 +48,7 @@ class InputGridSizeProcessorTest {
             assertEquals(gameParameters, processedInput.gameParameters)
         }
 
-        val gameParameters = GameParameters(maxWidth = 10, maxHeight = 15)
+        val gameParameters = GameParameters(maxWidth = 10, maxHeight = 15,)
         assertInvalid("0 0", gameParameters)
         assertInvalid("11 8", gameParameters)
         assertInvalid("9 16", gameParameters)
@@ -56,7 +56,7 @@ class InputGridSizeProcessorTest {
 
     @Test
     fun `should allow defining grid with max height and width`() {
-        val gameParameters = GameParameters(maxWidth = 10, maxHeight = 15)
+        val gameParameters = GameParameters(maxWidth = 10, maxHeight = 15,)
         val processedInput = inputGridSizeProcessor.process("10 15", gameParameters)
 
         assertValid(10, 15, processedInput)
@@ -64,7 +64,7 @@ class InputGridSizeProcessorTest {
 
     @Test
     fun `should accept any positive numbers for height when max height is not defined`() {
-        val gameParameters = GameParameters(maxWidth = 10)
+        val gameParameters = GameParameters(maxWidth = 10,)
         val processedInput = inputGridSizeProcessor.process("7 16", gameParameters)
 
         assertValid(7, 16, processedInput)
@@ -72,14 +72,14 @@ class InputGridSizeProcessorTest {
 
     @Test
     fun `should accept any positive numbers for width when max width is not defined`() {
-        val gameParameters = GameParameters(maxHeight = 10)
+        val gameParameters = GameParameters(maxHeight = 10,)
         val processedInput = inputGridSizeProcessor.process("14 8", gameParameters)
 
         assertValid(14, 8, processedInput)
     }
     @Test
     fun `should retain other properties of supplied gameParameters`() {
-        val gameParameters = GameParameters(generations = 3)
+        val gameParameters = GameParameters(generations = 3,)
         val processedInput = inputGridSizeProcessor.process("7 10", gameParameters)
 
         assertValid(7, 10, processedInput)

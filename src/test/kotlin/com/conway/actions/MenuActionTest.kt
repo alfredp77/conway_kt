@@ -65,9 +65,9 @@ class MenuActionTest {
 
     @Test
     fun `should return gameParameters from processed input`() {
-        val gameParameters = GameParameters(1)
+        val gameParameters = GameParameters(1,)
         whenever(userInputOutput.readLine()).thenReturn("testInput")
-        val processedGameParameters = GameParameters(2)
+        val processedGameParameters = GameParameters(2,)
         whenever(inputProcessor.process("testInput", gameParameters))
             .thenReturn(ProcessedInput.validAndExit("", processedGameParameters))
 
@@ -80,9 +80,9 @@ class MenuActionTest {
 
     @Test
     fun `should ask for input again when it is invalid`() {
-        val gameParameters = GameParameters(1)
+        val gameParameters = GameParameters(1,)
         whenever(userInputOutput.readLine()).thenReturn("testInput", Commands.EXIT.value)
-        val processedGameParameters = GameParameters(2)
+        val processedGameParameters = GameParameters(2,)
         whenever(inputProcessor.process("testInput", gameParameters))
             .thenReturn(ProcessedInput.invalid("wrong", processedGameParameters))
 
@@ -98,8 +98,8 @@ class MenuActionTest {
     fun `should ask for input again when it is valid and needs more input`() {
         val gameParameters = GameParameters()
         whenever(userInputOutput.readLine()).thenReturn("testInput1", "testInput2")
-        val processedGameParameters = GameParameters(1)
-        val exitGameParameters = GameParameters(2)
+        val processedGameParameters = GameParameters(1,)
+        val exitGameParameters = GameParameters(2,)
         whenever(inputProcessor.process("testInput1", gameParameters))
             .thenReturn(ProcessedInput.validAndContinue("", processedGameParameters))
         whenever(inputProcessor.process("testInput2", processedGameParameters))
@@ -114,9 +114,9 @@ class MenuActionTest {
 
     @Test
     fun `should display last prompt on exit if any`() {
-        val gameParameters = GameParameters(1)
+        val gameParameters = GameParameters(1,)
         whenever(userInputOutput.readLine()).thenReturn("testInput1")
-        val processedGameParameters = GameParameters(2)
+        val processedGameParameters = GameParameters(2,)
         whenever(inputProcessor.process("testInput1", gameParameters))
             .thenReturn(ProcessedInput.validAndExit("xyz", processedGameParameters))
 
@@ -129,9 +129,9 @@ class MenuActionTest {
 
     @Test
     fun `should not display anything on exit when there's no exit prompt`() {
-        val gameParameters = GameParameters(1)
+        val gameParameters = GameParameters(1,)
         whenever(userInputOutput.readLine()).thenReturn("testInput1")
-        val processedGameParameters = GameParameters(2)
+        val processedGameParameters = GameParameters(2,)
         whenever(inputProcessor.process("testInput1", gameParameters))
             .thenReturn(ProcessedInput.validAndExit("", processedGameParameters))
 

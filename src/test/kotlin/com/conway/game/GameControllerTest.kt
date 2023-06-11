@@ -50,7 +50,7 @@ class GameControllerTest {
         action.stub {
             on { this.id } doReturn id
             on { this.description } doReturn description
-            on { this.execute(any()) } doReturn GameParameters(exit = true)
+            on { this.execute(any()) } doReturn GameParameters(exit = true,)
         }
         return action
     }

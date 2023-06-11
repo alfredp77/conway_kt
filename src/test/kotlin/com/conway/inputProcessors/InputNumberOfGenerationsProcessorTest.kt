@@ -45,7 +45,7 @@ class InputNumberOfGenerationsProcessorTest {
 
     @Test
     fun `should validate number of generations within limits`() {
-        val gameParameters = GameParameters(minGenerations = 10, maxGenerations = 20)
+        val gameParameters = GameParameters(minGenerations = 10, maxGenerations = 20,)
         assertInvalid("0", gameParameters)
         assertInvalid("9", gameParameters)
         assertInvalid("21", gameParameters)
@@ -60,7 +60,7 @@ class InputNumberOfGenerationsProcessorTest {
 
     @Test
     fun `should retain other properties of supplied gameParameters`() {
-        val gameParameters = GameParameters(maxWidth = 8)
+        val gameParameters = GameParameters(maxWidth = 8,)
         val processedInput = processor.process("7", gameParameters)
 
         assertValid(7, processedInput)

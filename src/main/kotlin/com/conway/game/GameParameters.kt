@@ -8,5 +8,6 @@ data class GameParameters(
     val maxWidth: Int = 0,
     val maxHeight: Int = 0,
     val minGenerations: Int = 0,
-    val maxGenerations: Int = 0
+    val maxGenerations: Int = 0,
+    val liveCellsPositions: List<Cell> = emptyList()
 )
