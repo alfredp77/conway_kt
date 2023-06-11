@@ -1,6 +1,7 @@
 package com.conway.inputProcessors
 
 import com.conway.game.GameParameters
+import com.conway.tools.InvalidInputMessage
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -40,9 +41,10 @@ class InputGridSizeProcessorTest {
     fun `should validate grid size within limits` () {
 
         fun assertInvalid(input:String, gameParameters: GameParameters) {
-            val processedInput = inputGridSizeProcessor.process("0 0", gameParameters)
+            val processedInput = inputGridSizeProcessor.process(input, gameParameters)
             assertFalse(processedInput.isValid)
             assert(processedInput.shouldContinue)
+            assertEquals(InvalidInputMessage, processedInput.prompt)
             assertEquals(gameParameters, processedInput.gameParameters)
         }
 
@@ -77,7 +79,7 @@ class InputGridSizeProcessorTest {
     }
     @Test
     fun `should retain other properties of supplied gameParameters`() {
-        val gameParameters = GameParameters(generations = 3, maxWidth = 8, maxHeight = 10)
+        val gameParameters = GameParameters(generations = 3)
         val processedInput = inputGridSizeProcessor.process("7 10", gameParameters)
 
         assertValid(7, 10, processedInput)
@@ -85,3 +87,4 @@ class InputGridSizeProcessorTest {
     }
 
 }
+
