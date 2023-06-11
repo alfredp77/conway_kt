@@ -8,6 +8,7 @@ enum class Commands (val value: String) {
     companion object {
         fun fromString(value: String): Commands {
             return when (value) {
+                "*" -> CLEAR
                 "#" -> EXIT
                 else -> UNKNOWN
             }
