@@ -4,10 +4,8 @@ import com.conway.game.GameParameters
 import com.conway.tools.InvalidInputMessage
 
 class InputNumberOfGenerationsProcessor : InputProcessor {
-    override val id: String
-        get() = TODO("Not yet implemented")
-    override val description: String
-        get() = TODO("Not yet implemented")
+    override val id = "2"
+    override val description = "Specify number of generations"
 
     override fun process(input: String, gameParameters: GameParameters): ProcessedInput {
         val generations = input.toIntOrNull()
