@@ -46,16 +46,16 @@ class InputNumberOfGenerationsProcessorTest {
     @Test
     fun `should validate number of generations within limits`() {
         val gameParameters = GameParameters(minGenerations = 10, maxGenerations = 20)
-        assertInvalid("0", gameParameters);
-        assertInvalid("9", gameParameters);
-        assertInvalid("21", gameParameters);
+        assertInvalid("0", gameParameters)
+        assertInvalid("9", gameParameters)
+        assertInvalid("21", gameParameters)
     }
 
     @Test
     fun `should only check generations is greater than zero when minGenerations is not specified`() {
         val gameParameters = GameParameters()
-        assertInvalid("-1", gameParameters);
-        assertInvalid("0", gameParameters);
+        assertInvalid("-1", gameParameters)
+        assertInvalid("0", gameParameters)
     }
 
     @Test
