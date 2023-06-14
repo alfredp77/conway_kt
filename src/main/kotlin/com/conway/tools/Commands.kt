@@ -3,6 +3,7 @@ package com.conway.tools
 enum class Commands (val value: String) {
     EXIT("#"),
     UNKNOWN("unknown"),
+    NEXT(">"),
     CLEAR("*");
 
     companion object {
@@ -10,6 +11,7 @@ enum class Commands (val value: String) {
             return when (value) {
                 "*" -> CLEAR
                 "#" -> EXIT
+                ">" -> NEXT
                 else -> UNKNOWN
             }
         }

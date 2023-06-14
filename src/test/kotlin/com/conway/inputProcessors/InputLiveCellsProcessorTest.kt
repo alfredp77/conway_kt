@@ -59,3 +59,4 @@ class InputLiveCellsProcessorTest {
         assertEquals(gameParameters.copy(liveCellsPositions = emptyList()), result.gameParameters)
     }
 }
+
