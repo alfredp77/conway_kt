@@ -27,6 +27,3 @@ data class Cell(val x:Int, val y:Int) {
         )
     }
 }
-
-
-data class NeighbouringCells(val neighbours: List<Cell>, val missing: List<Cell>)
