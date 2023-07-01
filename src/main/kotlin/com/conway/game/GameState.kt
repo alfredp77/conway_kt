@@ -1,5 +1,4 @@
 package com.conway.game
 
-class GameState(val liveCells: List<Cell> = emptyList(), val generation: Int = 0) {
-
+class GameState(val liveCells: List<Cell> = emptyList(), val generation: Int = 0, val parameters: GameParameters = GameParameters()) {
 }
