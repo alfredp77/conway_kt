@@ -70,8 +70,8 @@ class RunProcessorTest {
         val nextState = GameState(generation = 1)
         whenever(gameRunner.generateNextState(initialState)).thenReturn(nextState)
 
-        runProcessor.initialize(parameters);
-        runProcessor.process(Commands.NEXT.value, parameters);
+        runProcessor.initialize(parameters)
+        runProcessor.process(Commands.NEXT.value, parameters)
 
         verify(printer, times(1)).print("Generation 1", nextState)
     }
@@ -104,7 +104,7 @@ class RunProcessorTest {
         val initialState = GameState()
         whenever(gameRunner.generateInitialState(parameters)).thenReturn(initialState)
 
-        runProcessor.initialize(parameters);
+        runProcessor.initialize(parameters)
         val processedInput = runProcessor.process("some invalid input", parameters)
 
         assertEquals("", processedInput.prompt)

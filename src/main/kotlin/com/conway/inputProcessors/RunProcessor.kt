@@ -4,7 +4,6 @@ import com.conway.game.GameParameters
 import com.conway.game.GameRunner
 import com.conway.game.GameState
 import com.conway.tools.Commands
-import com.conway.tools.InvalidInputMessage
 import com.conway.tools.LiveCellsPrinter
 import com.conway.tools.NextGenerationPrompt
 

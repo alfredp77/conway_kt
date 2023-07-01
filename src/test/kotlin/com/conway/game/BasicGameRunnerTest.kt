@@ -12,7 +12,7 @@ class BasicGameRunnerTest {
 
         assertEquals(parameters, initialState.parameters)
         assertEquals(parameters.liveCellsPositions, initialState.liveCells)
-        assertEquals(0, initialState.generation);
+        assertEquals(0, initialState.generation)
     }
 
     @Test
