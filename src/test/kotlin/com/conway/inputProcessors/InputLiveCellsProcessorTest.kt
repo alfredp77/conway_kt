@@ -4,7 +4,7 @@ import com.conway.game.Cell
 import com.conway.game.GameParameters
 import com.conway.tools.Commands
 import com.conway.tools.InvalidInputMessage
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class InputLiveCellsProcessorTest {

@@ -2,8 +2,8 @@ package com.conway.game
 
 import com.conway.actions.Action
 import com.conway.tools.*
-import org.junit.jupiter.api.Test
 import org.mockito.kotlin.*
+import kotlin.test.Test
 
 class GameControllerTest {
     private val gameParameters = GameParameters()

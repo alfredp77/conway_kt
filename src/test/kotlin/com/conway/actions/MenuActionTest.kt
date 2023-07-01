@@ -6,9 +6,9 @@ import com.conway.inputProcessors.ProcessedInput
 import com.conway.tools.Commands
 import com.conway.tools.InvalidInputMessage
 import com.conway.tools.UserInputOutput
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 import org.mockito.kotlin.*
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 abstract class MockInputProcessor : InputProcessor
@@ -17,7 +17,7 @@ class MenuActionTest {
 
     private val inputProcessor: MockInputProcessor = mock()
     private val userInputOutput: UserInputOutput = mock()
-    @BeforeEach
+    @BeforeTest
     fun setUp() {
         whenever(inputProcessor.initialize(any())).thenCallRealMethod()
         whenever(inputProcessor.process(any(), any())).thenCallRealMethod()

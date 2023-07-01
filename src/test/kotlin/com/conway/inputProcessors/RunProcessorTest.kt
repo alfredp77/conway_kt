@@ -6,7 +6,7 @@ import com.conway.game.GameState
 import com.conway.tools.Commands
 import com.conway.tools.LiveCellsPrinter
 import com.conway.tools.NextGenerationPrompt
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
