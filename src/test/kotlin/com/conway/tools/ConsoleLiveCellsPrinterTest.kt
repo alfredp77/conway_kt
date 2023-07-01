@@ -3,6 +3,7 @@ package com.conway.tools
 import com.conway.game.Cell
 import com.conway.game.GameParameters
 import com.conway.game.GameState
+import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -46,6 +47,11 @@ class ConsoleLiveCellsPrinterTest {
             . o o .
             . . . .
         """.trimIndent(), output.trimEnd())
+    }
+
+    @AfterTest
+    fun cleanUp() {
+        consoleTestHelper.cleanUp()
     }
 }
 
