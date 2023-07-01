@@ -1,22 +1,18 @@
 package com.conway.game
 
+
 data class Cell(val x:Int, val y:Int) {
     companion object CellHelpers {
 
-        fun findNeighbours(cell: Cell, allCells: HashSet<Cell>): NeighbouringCells {
-            val allNeighbours = findAllNeighbours(cell).toHashSet()
-
-            val neighbours = mutableListOf<Cell>()
-            val missing = mutableListOf<Cell>()
-            for (neighbour in allNeighbours) {
-                if (neighbour in allCells) {
-                    neighbours.add(neighbour)
-                } else {
-                    missing.add(neighbour)
+        fun findLiveNeighbours(cell: Cell, allCells: HashSet<Cell>): Sequence<Cell> {
+            return sequence{
+                val allNeighbours = findAllNeighbours(cell).toHashSet()
+                for (neighbour in allNeighbours) {
+                    if (neighbour in allCells) {
+                        yield(neighbour)
+                    }
                 }
             }
-
-            return NeighbouringCells(neighbours, missing)
         }
 
         fun findAllNeighbours(cell: Cell) = listOf(

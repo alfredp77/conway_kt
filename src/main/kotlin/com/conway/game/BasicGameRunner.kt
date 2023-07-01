@@ -13,8 +13,8 @@ class BasicGameRunner : GameRunner {
         } + currentState.liveCells).toHashSet()
 
         val nextLiveCells = nextAllCells.filter { cell ->
-            val (neighbours, _) = Cell.findNeighbours(cell, currentLiveCells)
-            neighbours.count() == 3 || (neighbours.count() == 2 && cell in currentLiveCells)
+            val neighboursCount = Cell.findLiveNeighbours(cell, currentLiveCells).count()
+            neighboursCount == 3 || (neighboursCount == 2 && cell in currentLiveCells)
         }
         return GameState(nextLiveCells, nextGeneration, currentState.parameters)
     }
