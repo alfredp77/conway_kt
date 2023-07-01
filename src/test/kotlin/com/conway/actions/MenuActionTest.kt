@@ -6,6 +6,8 @@ import com.conway.inputProcessors.ProcessedInput
 import com.conway.tools.Commands
 import com.conway.tools.InvalidInputMessage
 import com.conway.tools.UserInputOutput
+import io.mockk.every
+import io.mockk.mockk
 import org.mockito.kotlin.*
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -17,6 +19,7 @@ class MenuActionTest {
 
     private val inputProcessor: MockInputProcessor = mock()
     private val userInputOutput: UserInputOutput = mock()
+    private val mockInputProcessor = mockk<InputProcessor>()
     @BeforeTest
     fun setUp() {
         whenever(inputProcessor.initialize(any())).thenCallRealMethod()
@@ -27,12 +30,10 @@ class MenuActionTest {
 
     @Test
     fun `should use id and description from inputProcessor`() {
-        inputProcessor.stub {
-            on { id } doReturn "testId"
-            on { description } doReturn "testDescription"
-        }
+        every { mockInputProcessor.id } returns "testId"
+        every { mockInputProcessor.description } returns "testDescription"
 
-        val menuAction = MenuAction(userInputOutput, inputProcessor)
+        val menuAction = MenuAction(userInputOutput, mockInputProcessor)
 
         assertEquals("testId", menuAction.id)
         assertEquals("testDescription", menuAction.description)
