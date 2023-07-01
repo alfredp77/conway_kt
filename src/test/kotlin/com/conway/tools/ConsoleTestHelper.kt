@@ -24,7 +24,7 @@ class ConsoleTestHelper {
 
     fun cleanUp() {
         outputStream.close()
-        System.setIn(System.`in`);
-        System.setOut(System.out);
+        System.setIn(System.`in`)
+        System.setOut(System.out)
     }
 }
