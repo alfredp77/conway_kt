@@ -6,25 +6,24 @@ import com.conway.game.GameState
 import com.conway.tools.Commands
 import com.conway.tools.LiveCellsPrinter
 import com.conway.tools.NextGenerationPrompt
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import kotlin.test.Test
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.times
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
 class RunProcessorTest {
 
-    private val gameRunner = mock<GameRunner>()
-    private val printer = mock<LiveCellsPrinter>()
+    private val gameRunner = mockk<GameRunner>(relaxed = true)
+    private val printer = mockk<LiveCellsPrinter>(relaxed = true)
 
     private val runProcessor = RunProcessor(gameRunner, printer)
     @Test
     fun `should generate initial state on initialize`() {
         val parameters = GameParameters(generations = 2)
         val initialState = GameState()
-        whenever(gameRunner.generateInitialState(parameters)).thenReturn(initialState)
+        every { gameRunner.generateInitialState(parameters) } returns initialState
 
         val processedInput = runProcessor.initialize(parameters)
 
@@ -38,11 +37,11 @@ class RunProcessorTest {
     fun `should display initial position on initialize`() {
         val parameters = GameParameters(generations = 2)
         val initialState = GameState()
-        whenever(gameRunner.generateInitialState(parameters)).thenReturn(initialState)
+        every { gameRunner.generateInitialState(parameters) } returns initialState
 
         runProcessor.initialize(parameters)
 
-        verify(printer, times(1)).print("Initial position", initialState)
+        verify (exactly = 1) {printer.print("Initial position", initialState)}
     }
 
     @Test
@@ -50,8 +49,8 @@ class RunProcessorTest {
         val parameters = GameParameters(generations = 2)
         val initialState = GameState()
         val nextState = GameState()
-        whenever(gameRunner.generateInitialState(parameters)).thenReturn(initialState)
-        whenever(gameRunner.generateNextState(initialState)).thenReturn(nextState)
+        every { gameRunner.generateInitialState(parameters) } returns initialState
+        every { gameRunner.generateNextState(initialState) } returns nextState
 
         runProcessor.initialize(parameters)
         val processedInput = runProcessor.process(Commands.NEXT.value, parameters)
@@ -66,14 +65,14 @@ class RunProcessorTest {
     fun `should display generated position on process`() {
         val parameters = GameParameters(generations = 2)
         val initialState = GameState()
-        whenever(gameRunner.generateInitialState(parameters)).thenReturn(initialState)
+        every { gameRunner.generateInitialState(parameters) } returns initialState
         val nextState = GameState(generation = 1)
-        whenever(gameRunner.generateNextState(initialState)).thenReturn(nextState)
+        every { gameRunner.generateNextState(initialState) } returns nextState
 
         runProcessor.initialize(parameters)
         runProcessor.process(Commands.NEXT.value, parameters)
 
-        verify(printer, times(1)).print("Generation 1", nextState)
+        verify (exactly = 1) { printer.print("Generation 1", nextState) }
     }
 
     @Test
@@ -82,9 +81,9 @@ class RunProcessorTest {
         val initialState = GameState()
         val state1 = GameState(generation=1)
         val state2 = GameState(generation=2)
-        whenever(gameRunner.generateInitialState(parameters)).thenReturn(initialState)
-        whenever(gameRunner.generateNextState(initialState)).thenReturn(state1)
-        whenever(gameRunner.generateNextState(state1)).thenReturn(state2)
+        every { gameRunner.generateInitialState(parameters) } returns initialState
+        every { gameRunner.generateNextState(initialState) } returns state1
+        every { gameRunner.generateNextState(state1) } returns state2
 
         runProcessor.initialize(parameters)
         runProcessor.process(Commands.NEXT.value, parameters)
@@ -94,15 +93,15 @@ class RunProcessorTest {
         assertEquals(NextGenerationPrompt, processedInput.prompt)
         assertFalse(processedInput.shouldContinue)
         assert(processedInput.isValid)
-        verify(printer, times(1)).print("Generation 1", state1)
-        verify(printer, times(1)).print("Generation 2", state2)
+        verify (exactly = 1) { printer.print("Generation 1", state1) }
+        verify (exactly = 1) { printer.print("Generation 2", state2) }
     }
 
     @Test
     fun `should prompt again when invalid input is received`() {
         val parameters = GameParameters(generations = 2)
         val initialState = GameState()
-        whenever(gameRunner.generateInitialState(parameters)).thenReturn(initialState)
+        every { gameRunner.generateInitialState(parameters) } returns initialState
 
         runProcessor.initialize(parameters)
         val processedInput = runProcessor.process("some invalid input", parameters)

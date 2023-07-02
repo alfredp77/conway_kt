@@ -8,7 +8,7 @@ import com.conway.tools.InvalidInputMessage
 import com.conway.tools.UserInputOutput
 import io.mockk.every
 import io.mockk.mockk
-import org.mockito.kotlin.*
+import io.mockk.verify
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -17,23 +17,25 @@ abstract class MockInputProcessor : InputProcessor
 
 class MenuActionTest {
 
-    private val inputProcessor: MockInputProcessor = mock()
-    private val userInputOutput: UserInputOutput = mock()
-    private val mockInputProcessor = mockk<InputProcessor>()
+    private val userInputOutput = mockk<UserInputOutput>()
+    private val inputProcessor = mockk<MockInputProcessor>()
     @BeforeTest
     fun setUp() {
-        whenever(inputProcessor.initialize(any())).thenCallRealMethod()
-        whenever(inputProcessor.process(any(), any())).thenCallRealMethod()
-        whenever(userInputOutput.readLine()).thenReturn("")
+        every { inputProcessor.id } returns "1"
+        every { inputProcessor.description } returns "test"
+        every { inputProcessor.initialize(any()) } answers { callOriginal() }
+        every  { inputProcessor.process(any(), any()) } answers { callOriginal() }
+        every  { userInputOutput.readLine() } returns ""
+        every { userInputOutput.displayLine(any()) } answers { callOriginal() }
     }
 
 
     @Test
     fun `should use id and description from inputProcessor`() {
-        every { mockInputProcessor.id } returns "testId"
-        every { mockInputProcessor.description } returns "testDescription"
+        every { inputProcessor.id } returns "testId"
+        every { inputProcessor.description } returns "testDescription"
 
-        val menuAction = MenuAction(userInputOutput, mockInputProcessor)
+        val menuAction = MenuAction(userInputOutput, inputProcessor)
 
         assertEquals("testId", menuAction.id)
         assertEquals("testDescription", menuAction.description)
@@ -42,35 +44,36 @@ class MenuActionTest {
     @Test
     fun `should first display prompt from initialize result of input processor on execute`() {
         val gameParameters = GameParameters()
-        whenever(inputProcessor.initialize(gameParameters)).thenReturn(ProcessedInput.validAndContinue(
+        every { inputProcessor.initialize(any()) } returns ProcessedInput.validAndContinue(
             "testPrompt",
             gameParameters
-        ))
+        )
+
         val menuAction = MenuAction(userInputOutput, inputProcessor)
 
         menuAction.execute(gameParameters)
 
-        verify(userInputOutput).displayLine(MenuAction.getPrompt("testPrompt"))
+        verify { userInputOutput.displayLine(MenuAction.getPrompt("testPrompt"))}
     }
 
     @Test
     fun `should exit immediately on exit command`() {
         val gameParameters = GameParameters()
-        whenever(userInputOutput.readLine()).thenReturn(Commands.EXIT.value)
+        every {  userInputOutput.readLine() } returns Commands.EXIT.value
+
         val menuAction = MenuAction(userInputOutput, inputProcessor)
 
         menuAction.execute(gameParameters)
 
-        verify(inputProcessor, never()).process(any(), any())
+        verify (inverse = true) { inputProcessor.process(any(), any()) }
     }
 
     @Test
     fun `should return gameParameters from processed input`() {
         val gameParameters = GameParameters(1,)
-        whenever(userInputOutput.readLine()).thenReturn("testInput")
+        every {userInputOutput.readLine()} returns "testInput"
         val processedGameParameters = GameParameters(2,)
-        whenever(inputProcessor.process("testInput", gameParameters))
-            .thenReturn(ProcessedInput.validAndExit("", processedGameParameters))
+        every {inputProcessor.process("testInput", gameParameters)} returns ProcessedInput.validAndExit("", processedGameParameters)
 
         val menuAction = MenuAction(userInputOutput, inputProcessor)
 
@@ -82,29 +85,26 @@ class MenuActionTest {
     @Test
     fun `should ask for input again when it is invalid`() {
         val gameParameters = GameParameters(1,)
-        whenever(userInputOutput.readLine()).thenReturn("testInput", Commands.EXIT.value)
+        every { userInputOutput.readLine() } returnsMany listOf("testInput", Commands.EXIT.value)
         val processedGameParameters = GameParameters(2,)
-        whenever(inputProcessor.process("testInput", gameParameters))
-            .thenReturn(ProcessedInput.invalid("wrong", processedGameParameters))
+        every { inputProcessor.process("testInput", gameParameters) } returns ProcessedInput.invalid("wrong", processedGameParameters)
 
         val menuAction = MenuAction(userInputOutput, inputProcessor)
 
         val result = menuAction.execute(gameParameters)
 
         assertEquals(processedGameParameters, result)
-        verify(userInputOutput, times(1)).displayLine(InvalidInputMessage)
+        verify (exactly = 1) { userInputOutput.displayLine(InvalidInputMessage) }
     }
 
     @Test
     fun `should ask for input again when it is valid and needs more input`() {
         val gameParameters = GameParameters()
-        whenever(userInputOutput.readLine()).thenReturn("testInput1", "testInput2")
+        every { userInputOutput.readLine() } returnsMany listOf("testInput1", "testInput2")
         val processedGameParameters = GameParameters(1,)
         val exitGameParameters = GameParameters(2,)
-        whenever(inputProcessor.process("testInput1", gameParameters))
-            .thenReturn(ProcessedInput.validAndContinue("", processedGameParameters))
-        whenever(inputProcessor.process("testInput2", processedGameParameters))
-            .thenReturn(ProcessedInput.validAndExit("", exitGameParameters))
+        every { inputProcessor.process("testInput1", gameParameters) } returns ProcessedInput.validAndContinue("", processedGameParameters)
+        every { inputProcessor.process("testInput2", processedGameParameters) } returns ProcessedInput.validAndExit("", exitGameParameters)
 
         val menuAction = MenuAction(userInputOutput, inputProcessor)
 
@@ -116,30 +116,28 @@ class MenuActionTest {
     @Test
     fun `should display last prompt on exit if any`() {
         val gameParameters = GameParameters(1,)
-        whenever(userInputOutput.readLine()).thenReturn("testInput1")
+        every { userInputOutput.readLine() } returns "testInput1"
         val processedGameParameters = GameParameters(2,)
-        whenever(inputProcessor.process("testInput1", gameParameters))
-            .thenReturn(ProcessedInput.validAndExit("xyz", processedGameParameters))
+        every { inputProcessor.process("testInput1", gameParameters) } returns ProcessedInput.validAndExit("xyz", processedGameParameters)
 
         val menuAction = MenuAction(userInputOutput, inputProcessor)
 
         menuAction.execute(gameParameters)
 
-        verify(userInputOutput).displayLine(MenuAction.getExitPrompt("xyz"))
+        verify { userInputOutput.displayLine(MenuAction.getExitPrompt("xyz")) }
     }
 
     @Test
     fun `should not display anything on exit when there's no exit prompt`() {
         val gameParameters = GameParameters(1,)
-        whenever(userInputOutput.readLine()).thenReturn("testInput1")
+        every { userInputOutput.readLine() } returns "testInput1"
         val processedGameParameters = GameParameters(2,)
-        whenever(inputProcessor.process("testInput1", gameParameters))
-            .thenReturn(ProcessedInput.validAndExit("", processedGameParameters))
+        every { inputProcessor.process("testInput1", gameParameters) } returns ProcessedInput.validAndExit("", processedGameParameters)
 
         val menuAction = MenuAction(userInputOutput, inputProcessor)
 
         menuAction.execute(gameParameters)
 
-        verify(userInputOutput, never()).displayLine(MenuAction.getExitPrompt(""))
+        verify (inverse = true) { userInputOutput.displayLine(MenuAction.getExitPrompt("")) }
     }
 }
