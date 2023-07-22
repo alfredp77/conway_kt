@@ -5,7 +5,6 @@ import com.conway.game.GameRunner
 import com.conway.game.GameState
 import com.conway.tools.Commands
 import com.conway.tools.LiveCellsPrinter
-import com.conway.tools.NextGenerationPrompt
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -28,7 +27,7 @@ class RunProcessorTest {
         val processedInput = runProcessor.initialize(parameters)
 
         assertEquals(initialState, runProcessor.currentState)
-        assertEquals(NextGenerationPrompt, processedInput.prompt)
+        assertEquals(runProcessor.nextGenerationPrompt, processedInput.prompt)
         assert(processedInput.shouldContinue)
         assert(processedInput.isValid)
     }
@@ -56,7 +55,7 @@ class RunProcessorTest {
         val processedInput = runProcessor.process(Commands.NEXT.value, parameters)
 
         assertEquals(nextState, runProcessor.currentState)
-        assertEquals(NextGenerationPrompt, processedInput.prompt)
+        assertEquals(runProcessor.nextGenerationPrompt, processedInput.prompt)
         assert(processedInput.shouldContinue)
         assert(processedInput.isValid)
     }
@@ -90,7 +89,7 @@ class RunProcessorTest {
         val processedInput = runProcessor.process(Commands.NEXT.value, parameters)
 
         assertEquals(state2, runProcessor.currentState)
-        assertEquals(NextGenerationPrompt, processedInput.prompt)
+        assertEquals(runProcessor.endGenerationPrompt, processedInput.prompt)
         assertFalse(processedInput.shouldContinue)
         assert(processedInput.isValid)
         verify (exactly = 1) { printer.print("Generation 1", state1) }

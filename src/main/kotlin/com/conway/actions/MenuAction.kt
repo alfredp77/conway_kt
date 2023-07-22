@@ -13,7 +13,8 @@ class MenuAction(private val userInputOutput: UserInputOutput, private val input
     override fun execute(gameParameters: GameParameters): GameParameters {
         var current = inputProcessor.initialize(gameParameters)
         while (current.shouldContinue) {
-            userInputOutput.displayLine(getPrompt(current.prompt))
+            val prompt = current.prompt.ifEmpty { inputProcessor.prompt }
+            userInputOutput.displayLine(getPrompt(prompt))
             val input = userInputOutput.readLine()
             if (input == Commands.EXIT.value) {
                 break

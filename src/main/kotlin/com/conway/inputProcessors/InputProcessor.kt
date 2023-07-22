@@ -5,6 +5,7 @@ import com.conway.game.GameParameters
 interface InputProcessor {
     val id: String
     val description: String
+    val prompt: String
 
     fun initialize(gameParameters: GameParameters): ProcessedInput {
         return ProcessedInput.validAndContinue("", gameParameters)

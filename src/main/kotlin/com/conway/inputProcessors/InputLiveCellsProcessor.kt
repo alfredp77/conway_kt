@@ -7,8 +7,8 @@ import com.conway.tools.InvalidInputMessage
 
 class InputLiveCellsProcessor : InputProcessor {
     override val id = "3"
-    override val description = "Please enter live cell position in x y format (example: 1 2), * to clear all the previously entered cells"
-
+    override val description = "Specify initial live cells"
+    override val prompt = "Please enter live cell position in x y format (example: 1 2), * to clear all the previously entered cells"
     override fun process(input: String, gameParameters: GameParameters): ProcessedInput {
         if (input == Commands.CLEAR.value) {
             return ProcessedInput.validAndContinue("", gameParameters.copy(liveCellsPositions = emptyList()))

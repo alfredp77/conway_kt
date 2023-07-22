@@ -23,6 +23,7 @@ class MenuActionTest {
     fun setUp() {
         every { inputProcessor.id } returns "1"
         every { inputProcessor.description } returns "test"
+        every { inputProcessor.prompt } returns "defaultPrompt"
         every { inputProcessor.initialize(any()) } answers { callOriginal() }
         every  { inputProcessor.process(any(), any()) } answers { callOriginal() }
         every  { userInputOutput.readLine() } returns ""
@@ -48,6 +49,22 @@ class MenuActionTest {
             "testPrompt",
             gameParameters
         )
+
+        val menuAction = MenuAction(userInputOutput, inputProcessor)
+
+        menuAction.execute(gameParameters)
+
+        verify { userInputOutput.displayLine(MenuAction.getPrompt("testPrompt"))}
+    }
+
+    @Test
+    fun `should use prompt from processor if initialize result is empty`() {
+        val gameParameters = GameParameters()
+        every { inputProcessor.initialize(any()) } returns ProcessedInput.validAndContinue(
+            "",
+            gameParameters
+        )
+        every { inputProcessor.prompt } returns "testPrompt"
 
         val menuAction = MenuAction(userInputOutput, inputProcessor)
 

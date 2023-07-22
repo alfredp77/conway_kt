@@ -6,7 +6,7 @@ import com.conway.tools.InvalidInputMessage
 class InputGridSizeProcessor : InputProcessor {
     override val id = "1"
     override val description = "Specify grid size"
-
+    override val prompt = "Please enter grid size (width height)"
     override fun process(input: String, gameParameters: GameParameters): ProcessedInput {
         input.split(" ").let {
             if (it.size != 2) {
