@@ -27,7 +27,7 @@ class MenuAction(private val userInputOutput: UserInputOutput, private val input
         }
 
         if (current.prompt.isNotEmpty()) {
-            userInputOutput.displayLine(getExitPrompt(current.prompt))
+            userInputOutput.waitForAnyKey(getExitPrompt(current.prompt))
         }
         return current.gameParameters
     }

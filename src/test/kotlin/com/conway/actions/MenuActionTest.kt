@@ -28,6 +28,7 @@ class MenuActionTest {
         every  { inputProcessor.process(any(), any()) } answers { callOriginal() }
         every  { userInputOutput.readLine() } returns ""
         every { userInputOutput.displayLine(any()) } answers { callOriginal() }
+        every { userInputOutput.waitForAnyKey(any()) } answers { callOriginal() }
     }
 
 
@@ -141,7 +142,7 @@ class MenuActionTest {
 
         menuAction.execute(gameParameters)
 
-        verify { userInputOutput.displayLine(MenuAction.getExitPrompt("xyz")) }
+        verify { userInputOutput.waitForAnyKey(MenuAction.getExitPrompt("xyz")) }
     }
 
     @Test
