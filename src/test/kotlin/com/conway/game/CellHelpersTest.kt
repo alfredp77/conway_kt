@@ -40,4 +40,18 @@ class CellHelpersTest {
             Cell(2,2)), neighbours.toHashSet())
     }
 
+    @Test
+    fun `test to fix bug`() {
+        val allCells = hashSetOf(
+            Cell(3,2),
+            Cell(5,2),
+            Cell(2,3),
+            Cell(3,4),
+            Cell(5,4),
+            Cell(4,5))
+
+        val neighbours = Cell.findLiveNeighbours(Cell(5, 4), allCells).toList()
+
+        assertEquals(1, neighbours.size)
+    }
 }

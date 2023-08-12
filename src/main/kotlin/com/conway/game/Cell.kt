@@ -6,8 +6,7 @@ data class Cell(val x:Int, val y:Int) {
 
         fun findLiveNeighbours(cell: Cell, allCells: HashSet<Cell>): Sequence<Cell> {
             return sequence{
-                val allNeighbours = findAllNeighbours(cell).toHashSet()
-                for (neighbour in allNeighbours) {
+                for (neighbour in findAllNeighbours(cell)) {
                     if (neighbour in allCells) {
                         yield(neighbour)
                     }
@@ -15,7 +14,7 @@ data class Cell(val x:Int, val y:Int) {
             }
         }
 
-        fun findAllNeighbours(cell: Cell) = listOf(
+        fun findAllNeighbours(cell: Cell) = sequenceOf(
             Cell(cell.x - 1, cell.y - 1),
             Cell(cell.x - 1, cell.y),
             Cell(cell.x - 1, cell.y + 1),

@@ -72,4 +72,29 @@ class BasicGameRunnerTest {
 
         assertEquals(listOf(Cell(2, 2), Cell(2, 3), Cell(3, 2), Cell(3, 3)), nextState.liveCells)
     }
+
+    @Test
+    fun `should not generate live cells outside boundaries`() {
+        val weird = GameParameters(width = 5, height = 5, generations = 3,
+            liveCellsPositions = listOf(
+                Cell(2, 2),
+                Cell(5,2),
+                Cell(3,3),
+                Cell(4, 3),
+                Cell(5, 3),
+                Cell(3, 4),
+                Cell(4, 4),
+                Cell(5, 4)))
+
+        val initialState = gameRunner.generateInitialState(weird)
+        val firstState = gameRunner.generateNextState(initialState)
+
+        val shouldBeEmpty = firstState.liveCells.filter { it !in listOf(Cell(3, 2),
+            Cell(5, 2),
+            Cell(2, 3),
+            Cell(3, 4),
+            Cell(5, 4),
+            Cell(4, 5)) }
+        assertEquals(emptyList<Cell>(), shouldBeEmpty)
+    }
 }
