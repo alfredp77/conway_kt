@@ -26,6 +26,15 @@ class ConsoleUserInputOutputTest {
         assertEquals("Hello World", line)
     }
 
+    @Test
+    fun `wait for any key should display prompt if supplied`() {
+        val consoleUserInputOutput = ConsoleUserInputOutput()
+
+        consoleUserInputOutput.waitForAnyKey("Press any key to continue")
+
+        assertEquals("Press any key to continue", consoleTestHelper.getOutput().trimEnd())
+    }
+
     @AfterTest
     fun cleanUp() {
         consoleTestHelper.cleanUp()

@@ -11,6 +11,7 @@ class ConsoleUserInputOutput : UserInputOutput {
     }
 
     override fun waitForAnyKey(exitPrompt: String) {
+        println(exitPrompt)
         System.`in`.read()
     }
 }

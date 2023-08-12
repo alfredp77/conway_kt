@@ -13,7 +13,7 @@ class RunProcessor(private val gameRunner: GameRunner, private val printer: Live
         }
 
     val nextGenerationPrompt = "Enter ${Commands.NEXT.value} to generate next generation"
-    val endGenerationPrompt = "Reached end of generations. Press any key to go back to main menu"
+    val endGenerationPrompt = "Reached end of generations"
 
     override val id = "4"
     override val description = "Run"
